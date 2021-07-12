@@ -28,9 +28,13 @@ public class BirdMovement : MonoBehaviour
             rb.velocity = Vector2.zero;
             rb.velocity = new Vector2(rb.velocity.x, birdSpeed);
         }
-        if(rb.velocity.y>0)
+        BirdRotation();
+    }
+    private void BirdRotation()
+    {
+        if (rb.velocity.y > 0)
         {
-            if(angle<=maxAngle)
+            if (angle <= maxAngle)
             {
                 angle = angle + 5;
             }
