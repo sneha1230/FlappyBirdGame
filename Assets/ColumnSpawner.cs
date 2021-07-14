@@ -18,11 +18,14 @@ public class ColumnSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= maxTime)
+        if(GameManager.gameOver==false)
         {
-            ColumnGenerator();
-            timer = 0;
+            timer += Time.deltaTime;
+            if (timer >= maxTime)
+            {
+                ColumnGenerator();
+                timer = 0;
+            }
         }
     }
     void ColumnGenerator()

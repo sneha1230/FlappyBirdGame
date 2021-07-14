@@ -9,10 +9,14 @@ public class BirdMovement : MonoBehaviour
     int angle;
     int minAngle = -90;
     int maxAngle=20;
+    public ScoreManager scoreManager;
+    bool touchedground;
+    public GameManager gameManager;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        scoreManager = FindObjectOfType<ScoreManager>();
     }
     // Start is called before the first frame update
     void Start()
@@ -23,7 +27,7 @@ public class BirdMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0)&&GameManager.gameOver==false)
         {
             rb.velocity = Vector2.zero;
             rb.velocity = new Vector2(rb.velocity.x, birdSpeed);
@@ -39,13 +43,44 @@ public class BirdMovement : MonoBehaviour
                 angle = angle + 5;
             }
         }
-        if (rb.velocity.y < 0)
+        else if (rb.velocity.y < 0)
         {
             if (angle >= minAngle)
             {
                 angle = angle - 5;
             }
         }
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        if (touchedground == false)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Column"))
+        {
+            Debug.Log("Scored!");
+            scoreManager.Scored();
+        }
+        if (collision.CompareTag("Pipe"))
+        {
+            Debug.Log("GameOver!");
+            gameManager.GameOver();
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            if(GameManager.gameOver==false)
+            {
+                //game over
+                gameManager.GameOver();
+            }
+            else
+            {
+                touchedground = true;
+            }
+        }
     }
 }
