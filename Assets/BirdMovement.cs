@@ -12,11 +12,13 @@ public class BirdMovement : MonoBehaviour
     public ScoreManager scoreManager;
     bool touchedground;
     public GameManager gameManager;
+    Animator anim;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         scoreManager = FindObjectOfType<ScoreManager>();
+        anim = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
@@ -27,7 +29,7 @@ public class BirdMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0)&&GameManager.gameOver==false)
+        if(Input.GetMouseButtonDown(0)&&GameManager.gameOver==false && GameManager.gameIsPaused == false)
         {
             rb.velocity = Vector2.zero;
             rb.velocity = new Vector2(rb.velocity.x, birdSpeed);
@@ -76,11 +78,17 @@ public class BirdMovement : MonoBehaviour
             {
                 //game over
                 gameManager.GameOver();
+                BirdDied();
             }
             else
             {
-                touchedground = true;
+                BirdDied();
             }
         }
+    }
+    void BirdDied()
+    {
+        touchedground = true;
+        anim.enabled = false;
     }
 }
